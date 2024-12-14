@@ -57,6 +57,14 @@ new class extends Component {
         {{-- :link="route('proyecto.show', ['proyecto' => ['id']])" --}}
         striped
         >
+        @scope('header_id', $header)
+          <span class="text-primary-content">{{ $header['label'] }}</span>
+        @endscope
+        @scope('header_nombre', $header)
+          <span class="text-primary-content">{{ $header['label'] }}</span>
+        @endscope
+
+
         @scope('actions', $proyecto)
           <div class="flex space-x-1">
             <x-button
