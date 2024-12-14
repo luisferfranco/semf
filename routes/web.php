@@ -15,3 +15,17 @@ Route::get('/logout', function () {
   return redirect('/');
 });
 
+// Protected routes here
+Route::middleware('auth')->group(function () {
+  Volt::route('/', 'users.index');
+
+  Volt::route('/proyecto', 'proyecto.index')
+    ->name('proyecto.index');
+
+  // Volt::route('/users', 'users.index');
+  // Volt::route('/users/create', 'users.create');
+  // Volt::route('/users/{user}/edit', 'users.edit');
+  // ... more
+});
+
+

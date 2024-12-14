@@ -46,7 +46,11 @@
           <x-menu-separator />
         @endif
 
-        <x-menu-item title="Hello" icon="o-sparkles" link="/" />
+        <x-menu-item
+          title="Proyectos"
+          icon="bxl.product-hunt"
+          link="{{ route('proyecto.index') }}"
+          />
         <x-menu-sub title="Settings" icon="o-cog-6-tooth">
           <x-menu-item title="Wifi" icon="o-wifi" link="####" />
           <x-menu-item title="Archives" icon="o-archive-box" link="####" />
