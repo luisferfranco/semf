@@ -33,7 +33,7 @@ export default {
           "neutral": "#8d8e99",
           "base-100": "#e7e5e4",
           "primary-content": "#333333",
-          "neutral-content": "#777777",
+          "neutral-content": "#555555",
         },
       },
       {
