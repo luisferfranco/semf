@@ -18,7 +18,7 @@ new class extends Component {
 
     $this->headers = [
       ['key' => 'id', 'label'=>"ID", "class" => "w-2", "disableLink" => true],
-      ['key' => 'nombre', 'label'=>"Nombre"],
+      ['key' => 'nombre', 'label'=>"Proyecto"],
     ];
   }
 
@@ -54,7 +54,7 @@ new class extends Component {
       <x-table
         :headers="$headers"
         :rows="$proyectos"
-        {{-- :link="route('proyecto.show', ['proyecto' => ['id']])" --}}
+        link="/proyecto/{id}"
         striped
         >
         @scope('header_id', $header)
@@ -64,20 +64,13 @@ new class extends Component {
           <span class="text-primary-content">{{ $header['label'] }}</span>
         @endscope
 
-
         @scope('actions', $proyecto)
           <div class="flex space-x-1">
             <x-button
               icon="bxs.trash"
-              class="btn-circle btn-ghost btn-xs"
+              class="btn-circle btn-ghost btn-xs text-error"
               tooltip-left="Eliminar"
               wire:click="delete({{ $proyecto->id }})"
-              />
-            <x-button
-              icon="bxs.edit"
-              class="btn-circle btn-ghost btn-xs"
-              tooltip-left="Detalles"
-              wire:click="edit({{ $proyecto->id }})"
               />
           </div>
         @endscope
