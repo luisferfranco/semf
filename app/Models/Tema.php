@@ -11,4 +11,7 @@ class Tema extends Model
     public function proyecto() {
       return $this->belongsTo(Proyecto::class);
     }
+    public function tareas() {
+      return $this->hasMany(Tarea::class);
+    }
 }
