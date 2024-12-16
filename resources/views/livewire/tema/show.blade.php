@@ -8,6 +8,7 @@ use Livewire\Attributes\Rule;
 new class extends Component {
   public $tema;
   public $isEditing = false;
+  public $isCreating = false;
 
   public $descripcion, $nombre;
   public $estado;
@@ -17,6 +18,7 @@ new class extends Component {
   // Variables del formulario
   #[Rule('required|max:255')]
   public $nombre_tarea;
+  public $descripcion_tarea;
   #[Rule('required')]
   public $asignada_a;
   #[Rule('required')]
@@ -69,16 +71,33 @@ new class extends Component {
       'asignada_a'        => $this->asignada_a,
       'asignada_por'      => auth()->id(),
       'tema_id'           => $this->tema->id,
+      'descripcion'       => $this->descripcion_tarea,
       'fecha_compromiso'  => $this->fecha_compromiso,
       'tipo'              => $this->tipo,
     ]);
 
-    $this->nombre_tarea     = '';
-    $this->asignada_a       = null;
-    $this->tema_id          = null;
-    $this->fecha_compromiso = null;
-    $this->tipo             = null;
+    $this->nombre_tarea       = '';
+    $this->asignada_a         = null;
+    $this->tema_id            = null;
+    $this->fecha_compromiso   = null;
+    $this->descripcion_tarea  = null;
+    $this->tipo               = null;
+
+    $this->isCreating         = false;
   }
+
+  public function reset_tarea() {
+    $this->nombre_tarea       = '';
+    $this->asignada_a         = null;
+    $this->tema_id            = null;
+    $this->fecha_compromiso   = null;
+    $this->descripcion_tarea  = null;
+    $this->tipo               = null;
+
+    $this->isCreating         = false;
+  }
+
+
 }; ?>
 
 <div>
@@ -141,36 +160,53 @@ new class extends Component {
     </div>
   </x-card>
 
-  <x-card title="Nueva Tarea" class="mb-4">
-    <x-form wire:submit='store' class="mb-4">
-      <x-input wire:model='nombre_tarea' placeholder='Nombre de la Tarea' autofocus />
-      <div class="flex justify-between space-x-2">
-        <div class="w-full">
-          <x-select wire:model='asignada_a' :options="$users" icon="bxs.user-circle" label='Asignada a' placeholder="Asignar un responsable"/>
-        </div>
-        <div class="w-full">
-          <x-datetime label="Fecha Compromiso" wire:model="fecha_compromiso" icon="bxs.calendar" />
-        </div>
-        <div class="w-full">
-          <x-select label="Tipo" wire:model="tipo" :options="$opciones_tipo" icon="bx.transfer-alt" placeholder="Selecciona" />
-        </div>
-      </div>
-      <div class="flex justify-end mt-4 space-x-2">
-        <x-button
-          type="submit"
-          icon="bx.save"
-          class="btn btn-primary"
-          label="Guardar"
-          />
-        <x-button
-          icon="bxs.hand"
-          class="btn btn-error"
-          label="Cancelar"
-          wire:click="reset"
-          />
-      </div>
-    </x-form>
-  </x-card>
+  {{-- Nueva Tarea --}}
+  <div x-data="{isCreating: $wire.entangle('isCreating')}">
+    <div x-show="!isCreating">
+      <x-button
+        icon="bxs.plus-circle"
+        label="Nueva Tarea"
+        class="mb-4 btn btn-primary"
+        @click="isCreating = true"
+        />
+    </div>
+    <div x-show="isCreating" x-cloak>
+      <x-card title="Nueva Tarea" class="mb-4">
+        <x-form wire:submit='store' class="mb-4">
+          <x-input wire:model='nombre_tarea' placeholder='Nombre de la Tarea' autofocus />
+          <div class="flex justify-between space-x-2">
+            <div class="w-full">
+              <x-select wire:model='asignada_a' :options="$users" icon="bxs.user-circle" label='Asignada a' placeholder="Asignar un responsable"/>
+            </div>
+            <div class="w-full">
+              <x-datetime label="Fecha Compromiso" wire:model="fecha_compromiso" icon="bxs.calendar" />
+            </div>
+            <div class="w-full">
+              <x-select label="Tipo" wire:model="tipo" :options="$opciones_tipo" icon="bx.transfer-alt" placeholder="Selecciona" />
+            </div>
+          </div>
+          <x-textarea wire:model='descripcion_tarea' placeholder='Describe la tarea' rows="5" hint='Usa Markdown' />
+
+          {{-- Guardar/Cancelar --}}
+          <div class="flex justify-end mt-4 space-x-2">
+            <x-button
+              type="submit"
+              icon="bx.save"
+              class="btn btn-primary"
+              label="Guardar"
+              />
+            <x-button
+              icon="bxs.hand"
+              class="btn btn-error"
+              label="Cancelar"
+              wire:click="reset_tarea"
+              />
+          </div>
+        </x-form>
+      </x-card>
+    </div>
+  </div>
+
 
   @if ($tema->tareas->count() == 0)
     <x-alert title="No hay tareas registrados" icon="bxs.info-circle" class="alert-warning" />
