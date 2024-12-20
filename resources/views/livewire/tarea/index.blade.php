@@ -23,7 +23,9 @@ new class extends Component {
   }
 
   private function getTareasConNivel($parentId = null, $nivel = 0) {
-    $tareas = Tarea::where('tarea_padre_id', $parentId)->get();
+    $tareas = Tarea::where('tarea_padre_id', $parentId)
+      ->orderBy('tema_id','asc')
+      ->get();
     $result = [];
 
     foreach ($tareas as $tarea) {
@@ -33,7 +35,7 @@ new class extends Component {
 
       $tarea->nombre_tarea = "";
       for ($i=0; $i<$nivel; $i++) {
-        $tarea->nombre_tarea .= "➡️";
+        $tarea->nombre_tarea .= "&nbsp;&nbsp;&nbsp;&nbsp;";
       }
       $tarea->nombre_tarea .= $tarea->nombre;
 
@@ -81,6 +83,13 @@ new class extends Component {
       icon: 's-check'
     );
   }
+
+  public function filtroProyecto($proyectoId) {
+    $this->tareas = Tarea::whereHas('tema', function($q) use ($proyectoId) {
+      $q->where('proyecto_id', $proyectoId);
+    })->get();
+    info($this->tareas);
+  }
 }; ?>
 
 <div>
@@ -111,90 +120,107 @@ new class extends Component {
     </x-form>
   </x-modal>
 
-  <x-card>
-    <x-slot:header>
-      <h2 class="card-title">Tareas</h2>
-    </x-slot>
+  <x-card class="mb-12" title="Tareas">
+    @php
+      $proyecto = "";
+      $tema = "";
+    @endphp
 
-    <div class="overflow-x-auto">
-      <table class="relative table table-auto">
-        <thead class="text-sm font-bold tracking-wider uppercase text-primary-content">
-          <tr>
-            <th class="sticky w-1 text-center">ID</th>
-            <th class="w-96">Tarea</th>
-            <th>Acciones<br />Realizadas</th>
-            <th class="w-32"></th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach ($tareas as $tarea)
-            <tr class="hover:bg-neutral/30">
-              <td class="text-center">{{ $tarea->id }}</td>
+    @foreach ($tareas as $tarea)
+      @if ($proyecto != $tarea->nombre_proyecto)
+        @php
+          $proyecto = $tarea->nombre_proyecto;
+        @endphp
 
-              {{-- Info de la tarea --}}
-              <td class="space-y-1">
-                <div class="text-lg">{{ $tarea->nombre_proyecto }}</div>
-                <div>{{ $tarea->nombre_tema }}</div>
-                <div class="flex items-start space-x-1 font-bold text-accent">
-                  {{-- estado == en proceso, indicador verde --}}
-                  <div class="flex-shrink-0 w-3 h-3 mt-1 rounded-full bg-success"></div>
-                  <div>
-                    {{ $tarea->nombre_tarea }}
+        <div
+          class="px-2 mt-4 text-xl font-bold"
+          wire:click='filtroProyecto({{ $tarea->tema->proyecto_id }})'
+          >
+          {{ $proyecto }}
+        </div>
+      @endif
+
+      @if ($tema != $tarea->nombre_tema)
+        @php
+          $tema = $tarea->nombre_tema;
+        @endphp
+
+        <div class="px-2 text-lg font-bold">{{ $tema }}</div>
+      @endif
+
+      <div class="flex items-start w-full px-2 py-1 space-x-6 rounded-lg hover:bg-neutral/30">
+
+        <div class="flex flex-col flex-grow">
+          <div class="text-lg">
+            {!! $tarea->nombre_tarea !!}
+            <x-badge
+              :value="$tarea->tipo"
+              class="badge-info"
+              />
+          </div>
+          <div class="flex items-center space-x-1 text-neutral">
+            <x-icon name="bxs.user" class="w-3 h-3" />
+            <div>{{ $tarea->asignadaA->name }}</div>
+          </div>
+          <div class="flex items-center space-x-1 text-neutral">
+            <x-icon name="bxs.calendar" class="w-3 h-3" />
+            <div>{{ $tarea->fecha_compromiso }}</div>
+          </div>
+          <div>
+            @if ($tarea->acciones->count() > 0)
+              <div x-data="{ open: false }">
+                <div x-show="!open">
+                  <div class="cursor-pointer" @click="open=true">
+                    {{ $tarea->acciones->count() }} acciones
+                    <x-icon
+                      name="bxs.chevron-down"
+                      class="w-4 h-4"
+                      />
                   </div>
                 </div>
-                <div class="flex justify-between">
-                  <div class="flex items-center space-x-1">
-                    <x-icon name="bxs.user" class="w-3 h-3" />
-                    <div>{{ $tarea->asignadaA->name }}</div>
-                  </div>
-                  <div class="flex items-center space-x-1">
-                    <x-icon name="bxs.calendar" class="w-3 h-3" />
-                    <div>{{ $tarea->fecha_compromiso }}</div>
-                  </div>
-                </div>
-                <x-badge
-                  :value="$tarea->tipo"
-                  class="badge-info"
-                  />
-              </td>
 
-              {{-- Acciones --}}
-              <td>
-                @if ($tarea->acciones->count() > 0)
+                <div x-show="open">
+                  <div
+                    class="flex items-center space-x-1 cursor-pointer"
+                    @click="open = false"
+                    >
+                    <div>Cerrar</div>
+                    <x-icon
+                      name="bxs.chevron-up"
+                      class="w-4 h-4 cursor-pointer"
+                      />
+                  </div>
                   @foreach ($tarea->acciones as $accion)
                     <div class="my-2">
-                      <div class="flex space-x-1">
+                      <div class="flex items-center space-x-1 text-sm text-neutral">
                         <x-icon name="bxs.calendar" class="w-3 h-3" />
                         <div>{{ $accion->fecha }}</div>
                       </div>
                       <div>{{ $accion->descripcion }}</div>
                     </div>
                   @endforeach
-                @else
-                  <x-alert
-                    title="Sin acciones"
-                    message="No se han registrado acciones para esta tarea"
-                    class="alert-warning"
-                    icon="bxs.time"
-                    />
-                @endif
-                <x-button
-                  icon="bxs.plus-circle"
-                  label="Agregar Acción"
-                  class="mt-2 btn-primary btn-xs"
-                  wire:click='n({{ $tarea->id }})'
-                  />
-              </td>
+                </div>
+              </div>
+            @else
+              <div class="flex items-center space-x-1 text-neutral">
+                <x-icon name="bxs.time" class="w-4 h-4" />
+                <div>No se han registrado acciones para esta tarea</div>
+              </div>
+            @endif
+            <x-button
+              icon="bxs.plus-circle"
+              label="Agregar Acción"
+              class="mt-2 btn-success btn-sm"
+              wire:click='n({{ $tarea->id }})'
+              />
+          </div>
+        </div>
 
-              <td>
-                <x-button icon="o-eye" class="btn-circle btn-ghost btn-xs" tooltip-left="ver" />
-                <x-button icon="o-pencil" class="btn-circle btn-ghost btn-xs" tooltip-left="editar" />
-                <x-button icon="o-trash" class="btn-circle btn-ghost btn-xs" tooltip-left="eliminar" />
-              </td>
-            </tr>
-          @endforeach
-        </tbody>
-      </table>
-    </div>
+
+
+      </div>
+
+    @endforeach
   </x-card>
+
 </div>
