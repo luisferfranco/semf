@@ -2,7 +2,7 @@
 use Livewire\Volt\Volt;
 use Illuminate\Support\Facades\Route;
 
-Volt::route('/', 'users.index');
+Volt::route('/', 'index');
 
 // Rutas de autenticación login, register y logout
 Volt::route('/login', 'login')->name('login');
@@ -17,7 +17,7 @@ Route::get('/logout', function () {
 
 // Protected routes here
 Route::middleware('auth')->group(function () {
-  Volt::route('/', 'users.index');
+  Volt::route('/', 'index');
 
   Volt::route('/proyecto', 'proyecto.index')
     ->name('proyecto.index');
