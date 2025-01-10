@@ -181,8 +181,8 @@ new class extends Component {
   </x-modal>
 
   <div class="flex justify-start space-x-2">
-    <livewire:selectProyecto class="flex-grow" />
-    <livewire:selectTema class="flex-grow" />
+    <livewire:selectproyecto class="flex-grow" />
+    <livewire:selecttema class="flex-grow" />
   </div>
 
   <div class="mt-4">
