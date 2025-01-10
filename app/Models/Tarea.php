@@ -10,12 +10,14 @@ class Tarea extends Model
     'nombre',
     'asignada_a',
     'asignada_por',
+    'proyecto_id',
     'tema_id',
     'fecha_inicio',
     'fecha_compromiso',
     'descripcion',
     'tipo',
     'estado',
+    'tarea_padre_id'
   ];
 
   public function asignadaA() {
@@ -26,6 +28,9 @@ class Tarea extends Model
   }
   public function tema() {
     return $this->belongsTo(Tema::class);
+  }
+  public function proyecto() {
+    return $this->belongsTo(Proyecto::class);
   }
   public function tareasHijas() {
     return $this->hasMany(Tarea::class, 'tarea_padre');

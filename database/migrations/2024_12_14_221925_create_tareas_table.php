@@ -15,9 +15,17 @@ return new class extends Migration
       $table->id();
 
       $table->string('nombre');
-      $table->foreignId('asignada_a')->constrained('users');
-      $table->foreignId('asignada_por')->constrained('users');
-      $table->foreignIdFor(\App\Models\Tema::class)->constrained();
+      $table->foreignIdFor(\App\Models\User::class, 'asignada_a')
+            ->nullable()
+            ->constrained();
+      $table->foreignIdFor(\App\Models\User::class, 'asignada_por')
+            ->constrained();
+      $table->foreignIdFor(\App\Models\Proyecto::class)
+            ->nullable()
+            ->constrained();
+      $table->foreignIdFor(\App\Models\Tema::class)
+            ->nullable()
+            ->constrained();
       $table->date('fecha_inicio')->nullable();
       $table->date('fecha_compromiso')->nullable();
       $table->text('descripcion')->nullable();
@@ -36,6 +44,7 @@ return new class extends Migration
    */
   public function down(): void
   {
+
     Schema::dropIfExists('tareas');
   }
 };
