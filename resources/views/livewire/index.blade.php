@@ -54,17 +54,34 @@ new class extends Component {
   public function actualizarProyecto($value) {
     $this->proyecto = Proyecto::find($value);
     $this->tema = null;
+    $this->tareas = null;
     $this->cargaTareas();
   }
 
   #[On('tema-actualizado')]
   public function actualizarTema($value) {
     $this->tema = Tema::find($value);
+    $this->tareas = null;
     $this->cargaTareas();
   }
 
   public function cargaTareas($parentId = null, $level = 0) {
-    $tareas = Tarea::where('tarea_padre_id', $parentId)->get();
+    if ($level === 0) {
+      if ($this->proyecto) {
+        $tareas = Tarea::where('proyecto_id', $this->proyecto->id)
+                       ->whereNull('tarea_padre_id')
+                       ->get();
+      } elseif ($this->tema) {
+        $tareas = Tarea::where('tema_id', $this->tema->id)
+                       ->whereNull('tarea_padre_id')
+                       ->get();
+      } else {
+        $tareas = Tarea::whereNull('tarea_padre_id')->get();
+      }
+    } else {
+      $tareas = Tarea::where('tarea_padre_id', $parentId)->get();
+    }
+
     foreach ($tareas as $tarea) {
       $tarea->level = $level;
       $this->tareas[] = $tarea;
@@ -180,9 +197,9 @@ new class extends Component {
     </form>
   </x-modal>
 
-  <div class="flex justify-start space-x-2">
-    <livewire:selectproyecto class="flex-grow" />
-    <livewire:selecttema class="flex-grow" />
+  <div class="flex-col justify-start space-y-2">
+    <livewire:selectproyecto />
+    <livewire:selecttema />
   </div>
 
   <div class="mt-4">

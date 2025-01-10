@@ -43,12 +43,22 @@ new class extends Component {
         'Proyecto actualizado',
         timeout: 3000,
       );
-      return;
+    } else {
+      $proyecto = new Proyecto();
+      $proyecto->nombre = $this->nombre;
+      $proyecto->descripcion = $this->descripcion;
+      $proyecto->user_id = auth()->id();
+      $proyecto->save();
+
+      $this->success(
+        'Proyecto creado',
+        timeout: 3000,
+      );
     }
 
     $this->proyectos = Proyecto::orderBy('nombre')->get();
     $this->modal = false;
-    $this->id = $proyecto->id;
+    // $this->id = $this->proyecto->id;
   }
 
   public function editar() {
