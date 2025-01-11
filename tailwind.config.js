@@ -24,35 +24,39 @@ export default {
     themes: [
       {
         myLight: {
-          "primary": "#3D71D9",
-          "secondary": "#2b2d32",
-          "success": "#1A7F4B",
-          "error": "#D10E5C",
-          "warning": "#FF9900",
-          "accent": "#10a5ac",
+          "primary": "#f76923",
+          "secondary": "#9333ea",
+          "accent": "#ec4899",
           "neutral": "#8d8e99",
-          "base-100": "#e7e5e4",
-          "primary-content": "#333333",
-          "base-content": "#333333",
-          "neutral-content": "#555555",
+          "neutral-content": "#222222",
+
+          "error": "#dc2626",
+          "warning": "#ffab00",
+          "success": "#15803d",
+          "info": "#2094f3",
+
+          "base-100": "#fff",
+          "base-content": "#333",
         },
-      },
-      {
         myDark: {
-          "primary": "#3D71D9",
-          "secondary": "#2b2d32",
-          "accent": "#10a5ac",
+          "primary": "#ff9238",
+          "secondary": "#d8b3ff",
+          "accent": "#ffa2d5",
           "neutral": "#8d8e99",
-          "success": "#1A7F4B",
-          "error": "#D10E5C",
-          "warning": "#FF9900",
-          "base-100": "#111111",
-          "base-200": "#555555",
-          "base-300": "#999999",
+          "neutral-content": "#cbd5e1",
+
+          "error": "#ff6a6a",
+          "warning": "#ffd54a",
+          "success": "#29ff77",
+          "info": "#7ad4ff",
+
+          "base-100": "#64748b",
+          "base-200": "#475569",
+          "base-300": "#1e293b",
+          "base-content": "#e7e5e4",
         }
-      },
+      }
     ],
-    darkMode: "dark",
     base: true,
     styled: true,
   },

@@ -112,7 +112,7 @@ new class extends Component {
     <x-slot:append>
       <x-button label=""
                 icon="bxs.edit"
-                class="rounded-s-none rounded-e-none btn-accent"
+                class="rounded-s-none rounded-e-none btn-secondary"
                 wire:click="editar({{ $id }})"
                 />
       {{--  Add `rounded-s-none` (RTL support) --}}

@@ -197,10 +197,10 @@ new class extends Component {
     </form>
   </x-modal>
 
-  <div class="flex-col justify-start space-y-2">
+  <x-card class="flex-col justify-start space-y-2 shadow-xl">
     <livewire:selectproyecto />
     <livewire:selecttema />
-  </div>
+  </x-card>
 
   <div class="mt-4">
     @if ($proyecto)
@@ -212,7 +212,7 @@ new class extends Component {
     @endif
   </div>
 
-  <div class="mt-4">
+  <x-card class="mt-4">
     <x-button wire:click='nuevaTarea'
               class="mb-4 btn btn-primary"
               label="Nueva Tarea"
@@ -257,5 +257,5 @@ new class extends Component {
     @else
       <p>No hay tareas</p>
     @endif
-  </div>
+  </x-card>
 </div>
