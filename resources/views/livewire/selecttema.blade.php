@@ -7,7 +7,7 @@ use Livewire\Volt\Component;
 
 new class extends Component {
   public $proyecto = null;
-  public $temas = null;
+  public $temas;
   public $id = null;        // id de la tarea (select)
   public $tema = null;      // Objeto tema para crear o editar
 

@@ -67,12 +67,12 @@ new class extends Component {
 
   public function cargaTareas($parentId = null, $level = 0) {
     if ($level === 0) {
-      if ($this->proyecto) {
-        $tareas = Tarea::where('proyecto_id', $this->proyecto->id)
+      if ($this->tema) {
+        $tareas = Tarea::where('tema_id', $this->tema->id)
                        ->whereNull('tarea_padre_id')
                        ->get();
-      } elseif ($this->tema) {
-        $tareas = Tarea::where('tema_id', $this->tema->id)
+      } elseif ($this->proyecto) {
+        $tareas = Tarea::where('proyecto_id', $this->proyecto->id)
                        ->whereNull('tarea_padre_id')
                        ->get();
       } else {
@@ -202,17 +202,17 @@ new class extends Component {
     <livewire:selecttema />
   </x-card>
 
-  <div class="mt-4">
-    @if ($proyecto)
-      <h2 class="text-2xl font-bold">{{ $proyecto->nombre }}</h2>
-    @endif
-
-    @if ($tema)
-      <h3 class="text-xl font-bold">{{ $tema->nombre }}</h3>
-    @endif
-  </div>
-
   <x-card class="mt-4">
+    <div class="mb-4">
+      @if ($proyecto)
+        <h2 class="text-2xl font-bold">{{ $proyecto->nombre }}</h2>
+      @endif
+
+      @if ($tema)
+        <h3 class="text-xl font-bold">{{ $tema->nombre }}</h3>
+      @endif
+    </div>
+
     <x-button wire:click='nuevaTarea'
               class="mb-4 btn btn-primary"
               label="Nueva Tarea"
@@ -220,23 +220,25 @@ new class extends Component {
               />
     @if ($tareas !== null)
       <x-table  :headers="$headers"
-                :rows="$tareas"
-                striped
-                >
+        :rows="$tareas"
+        striped
+        >
         @scope('cell_id', $tarea)
-          <p>{{ $tarea->id }} ({{ $tarea->level }})</p>
+          <p class="font-bold text-center">{{ $tarea->id }}</p>
         @endscope
 
         @scope('cell_nombre', $tarea)
           <p class="font-bold" style="margin-left: {{ 24 * $tarea->level }}px;">{{ $tarea->nombre }}</p>
-          <p class="text-xs text-neutral-content">{{$tarea->descripcion}}</p>
+          @if ($tarea->descripcion)
+            <p class="text-xs text-neutral-content">{{$tarea->descripcion}}</p>
+          @endif
         @endscope
 
         @scope('cell_asignada_a', $tarea)
           @if ($tarea->asignadaA)
             <p>{{ $tarea->asignadaA->name }}</p>
           @else
-            <p>⚠️</p>
+            <p class="text-center">⚠️</p>
           @endif
         @endscope
 
