@@ -168,7 +168,7 @@ new class extends Component {
                   placeholder="Descripción de la tarea"
                   rows="5"
                   />
-      <div class="flex items-center justify-between">
+      <div class="flex flex-col space-y-2 sm:items-center sm:justify-between sm:flex-row">
         <x-select label="Asignada a"
                   wire:model="asignada_a"
                   :options="$users"

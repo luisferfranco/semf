@@ -18,8 +18,12 @@ new class extends Component {
 
   #[On('proyecto-actualizado')]
   public function actualizarProyecto($value) {
-    $this->proyecto = $value;
-    $this->getData();
+    if ($value) {
+      $this->proyecto = $value;
+      $this->getData();
+    } else {
+      $this->temas = null;
+    }
   }
 
   public function getData() {
