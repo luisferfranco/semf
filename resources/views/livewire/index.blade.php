@@ -240,7 +240,13 @@ new class extends Component {
 
         @scope('cell_asignada_a', $tarea)
           @if ($tarea->asignadaA)
-            <p>{{ $tarea->asignadaA->name }}</p>
+            <p>
+              <x-button class="btn-ghost btn-sm"
+                link="{{ route('user.tareas', $tarea->asignadaA->id) }}"
+                >
+                {{ $tarea->asignadaA->name }}
+              </x-button>
+            </p>
           @else
             <p class="text-center">⚠️</p>
           @endif
