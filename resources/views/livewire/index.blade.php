@@ -228,7 +228,11 @@ new class extends Component {
         @endscope
 
         @scope('cell_nombre', $tarea)
-          <p class="font-bold" style="margin-left: {{ 24 * $tarea->level }}px;">{{ $tarea->nombre }}</p>
+          <p class="font-bold" style="margin-left: {{ 24 * $tarea->level }}px;">
+            <a href="{{ route('tarea.show', $tarea->id) }}">
+              {{ $tarea->nombre }}
+            </a>
+          </p>
           @if ($tarea->descripcion)
             <p class="text-xs text-neutral-content">{{$tarea->descripcion}}</p>
           @endif

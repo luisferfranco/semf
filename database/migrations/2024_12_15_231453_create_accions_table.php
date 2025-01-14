@@ -16,7 +16,6 @@ return new class extends Migration
 
       $table->foreignIdFor(\App\Models\Tarea::class)->constrained();
       $table->foreignIdFor(\App\Models\User::class, 'usuario_id')->constrained();
-      $table->date('fecha');
       $table->text('descripcion');
 
       $table->timestamps();

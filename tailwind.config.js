@@ -34,6 +34,7 @@ export default {
           "warning": "#ffab00",
           "success": "#15803d",
           "info": "#2094f3",
+          "info-content": "#fff",
 
           "base-100": "#fff",
           "base-content": "#333",
